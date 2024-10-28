@@ -1,0 +1,14 @@
+# Option 2: As a service
+# cp candyclaw.service /etc/systemd/system/candyclaw.service
+# sudo systemctl enable candyclaw.service
+# sudo systemctl start candyclaw.service
+
+[Unit]
+Description=Candyclaw
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/candyclaw/app.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
