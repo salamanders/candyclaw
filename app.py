@@ -26,7 +26,7 @@ def handle_joystick_input():
   data = request.get_json()
   x = data['x']
   y = data['y']
-  print(f"Received coordinates: x={x}, y={y}")
+  print("Received coordinates: x=%s, y=%s" % (x, y))
   # ... your control logic here ...
   return 'OK'
 
