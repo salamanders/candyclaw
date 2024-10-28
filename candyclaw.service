@@ -2,6 +2,7 @@
 # cp candyclaw.service /etc/systemd/system/candyclaw.service
 # sudo systemctl enable candyclaw.service
 # sudo systemctl start candyclaw.service
+# journalctl -u candyclaw.service
 
 [Unit]
 Description=Candyclaw
