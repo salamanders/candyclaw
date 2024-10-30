@@ -1,15 +1,31 @@
-html, body {
+html,
+body {
   overflow-x: hidden;
+  /* Prevent horizontal scrollbar */
+  width: 100vw;
+  /* Make sure body takes full viewport width */
+  height: 100vh;
+  /* Make sure body takes full viewport height */
+  display: flex;
+  /* Use flexbox for layout */
+  flex-direction: column;
+  /* Align items vertically */
+  align-items: center;
+  /* Center horizontally */
+  justify-content: center;
+  /* Center vertically */
+  gap: 20px;
 }
+
 body {
   position: relative;
 }
 
 #joystick {
-  width: 200px;
-  height: 200px;
+  width: 80vw;
+  height: 80vw;
   border: 1px solid black;
-  border-radius: 50%;
+  border-radius: 30%;
   position: relative;
 }
 
@@ -33,16 +49,9 @@ body {
   cursor: -webkit-grabbing;
   background-color: green;
 }
-/*
-#grabber {
-  position: relative;
-  transform: scale(1.5);
-  transform-origin: 0 0;
-}
-*/
 
 .slider-container {
-  width: 200px;
+  width: 80vw;
 }
 
 .slider {
