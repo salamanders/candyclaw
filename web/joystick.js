@@ -35,6 +35,10 @@ joystick.addEventListener('mousedown', (event) => {
     isDragging = true;
 });
 
+joystick.addEventListener('touchstart', (event) => {
+    isDragging = true;
+});
+
 const centerAndSendHalt = () => {
     isDragging = false;
     joystick_handle.style.left = '50%';
@@ -44,23 +48,36 @@ const centerAndSendHalt = () => {
 
 joystick.addEventListener('mouseup', () => {
     centerAndSendHalt();
-    //setTimeout(centerAndSendHalt, 200);
 });
+
+joystick.addEventListener('touchend', () => {
+    centerAndSendHalt();
+});
+
+const handleClientXY = (event) => {
+    const rect = joystick.getBoundingClientRect();
+    const x = (event.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+    const y = (event.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+
+    // Clamp x and y values to -1 to 1
+    const clampedX = Math.max(-1, Math.min(1, x));
+    const clampedY = Math.max(-1, Math.min(1, y));
+    joystick_handle.style.left = `${50 + clampedX * 50}%`;
+    joystick_handle.style.top = `${50 + clampedY * 50}%`;
+
+    sendCoordinates(clampedX, clampedY);
+};
 
 joystick.addEventListener('mousemove', (event) => {
     if (isDragging) {
-        const rect = joystick.getBoundingClientRect();
-        const x = (event.clientX - rect.left - rect.width / 2) / (rect.width / 2);
-        const y = (event.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+        handleClientXY(event)
+    }
+});
 
-        // Clamp x and y values to -1 to 1
-        const clampedX = Math.max(-1, Math.min(1, x));
-        const clampedY = Math.max(-1, Math.min(1, y));
-
-        joystick_handle.style.left = `${50 + clampedX * 50}%`;
-        joystick_handle.style.top = `${50 + clampedY * 50}%`;
-
-        sendCoordinates(clampedX, clampedY);
+joystick.addEventListener('touchmove', (event) => {
+    if (isDragging) {
+        const touch = event.touches[0]; // Get the first touch point
+        handleClientXY(touch);
     }
 });
 
