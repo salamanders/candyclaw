@@ -5,7 +5,6 @@ document.body.addEventListener('touchstart', (e) => e.preventDefault());
 
 const joystick = document.getElementById('joystick');
 const joystick_handle = document.getElementById('joystick_handle');
-// const genericTriggerButton = document.getElementById('genericButton');
 
 let isDragging = false;
 let lastSentTime = 0;
