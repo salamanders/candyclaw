@@ -17,9 +17,9 @@ def motor_a():
         data = request.get_json()
         x = int(data['x']*100)
         BP.set_motor_power(BP.PORT_A, x)
-        return f'A:{x}'
+        return "A:{}".format(data)
     except Exception as e:
-        print(f"Error in move_motor: {data}")
+        print("Error in move_motor: {}".format(data))
         print(e)
         return e
 
@@ -30,12 +30,12 @@ def handle_joystick_input():
         data = request.get_json()
         x = data['x']
         y = data['y']
-        print(f"Received coordinates: x={x}, y={y}")
+        print("Received coordinates: x={}, y={}".format(x, y))
         BP.set_motor_power(BP.PORT_D, int(x*100))
         BP.set_motor_power(BP.PORT_C, int(y*100))
         return 'OK'
     except Exception as e:
-        print(f"Error in motor_x_y {data}")
+        print("Error in motor_x_y {}".format(data))
         print(e)
         return e
   
