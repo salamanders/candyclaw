@@ -6,6 +6,8 @@ import brickpi3
 BP = brickpi3.BrickPi3() # Create an instance of the BrickPi3 class. BP will be the BrickPi3 object.
 
 app = Flask(__name__, static_folder='web')
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
 
 @app.route('/')
 def index():
@@ -38,7 +40,13 @@ def handle_joystick_input():
         print("Error in motor_x_y {}".format(request.get_json()))
         print(e)
         return e
-  
+
+@app.after_request
+def add_header(response):
+    if 'Cache-Control' not in response.headers:
+        response.headers['Cache-Control'] = 'no-store'
+    return response
+
 if __name__ == '__main__':
     try: 
         print('Starting on port 9876')
