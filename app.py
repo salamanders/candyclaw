@@ -1,34 +1,48 @@
 from flask import Flask, request, send_from_directory
 
+import time
+import brickpi3
+
+BP = brickpi3.BrickPi3() # Create an instance of the BrickPi3 class. BP will be the BrickPi3 object.
+
 app = Flask(__name__, static_folder='web')
 
 @app.route('/')
 def index():
     return send_from_directory('web', 'index.html')
 
-# def my_function():
-#     # Your function logic here
-#     print("Function triggered!")
+@app.route('/motor_a', methods=['POST'])
+def motor_a():
+    try: 
+        data = request.get_json()
+        x = int(data['x']*100)
+        BP.set_motor_power(BP.PORT_A, x)
+        return f'A:{x}'
+    except Exception as e:
+        print(f"Error in move_motor: {data}")
+        print(e)
+        return e
 
-# @app.route('/trigger', methods=['POST'])
-# def trigger_function():
-#     my_function()
-#     return 'Function triggered!'
-
-@app.route('/move_motor', methods=['POST'])
-def move_motor():
-    speed = request.form['speed']
-    move_motor(int(speed))
-    return 'Motor moved!'
-
-@app.route('/joystick_endpoint', methods=['POST'])
+# d is sideways, c is up/down
+@app.route('/motor_x_y', methods=['POST'])
 def handle_joystick_input():
-  data = request.get_json()
-  x = data['x']
-  y = data['y']
-  print("Received coordinates: x=%s, y=%s" % (x, y))
-  # ... your control logic here ...
-  return 'OK'
-
+    try:
+        data = request.get_json()
+        x = data['x']
+        y = data['y']
+        print(f"Received coordinates: x={x}, y={y}")
+        BP.set_motor_power(BP.PORT_D, int(x*100))
+        BP.set_motor_power(BP.PORT_C, int(y*100))
+        return 'OK'
+    except Exception as e:
+        print(f"Error in motor_x_y {data}")
+        print(e)
+        return e
+  
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', ssl_context='adhoc', debug=True)
+    try: 
+        app.run(host='0.0.0.0', ssl_context='adhoc', debug=True)
+        print('Finished app.run')
+    except KeyboardInterrupt: # except the program gets interrupted by Ctrl+C on the keyboard.
+        BP.reset_all()   # Unconfigure the sensors, disable the motors, and restore the LED to the co
+

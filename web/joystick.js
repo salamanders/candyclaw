@@ -11,22 +11,11 @@ let isDragging = false;
 let lastSentTime = 0;
 const sendRateLimit = 250; // milliseconds
 
-function genericTriggerFunction() {
-    fetch('/trigger', {
-        method: 'POST'
-    })
-        .then(response => response.text())
-        .then(data => console.log(data))
-        .catch(error => console.error('Error:', error));
-}
-
-// genericTriggerButton.addEventListener('click', genericTriggerFunction);
-
 function sendCoordinates(x, y) {
     // TODO: Or big enough move?
     if (Date.now() - lastSentTime > sendRateLimit) {
         console.info('sendCoordinates: ', x, y);
-        fetch('/joystick_endpoint', {
+        fetch('/motor_x_y', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -75,46 +64,31 @@ joystick.addEventListener('mousemove', (event) => {
     }
 });
 
-const grabber = document.getElementById('grabber');
-grabber.addEventListener("input", (event) => {
-    console.log('Grabber input:', event.target.value);
+const motorA = document.getElementById('motorA');
+
+function sendMotorA(x) {
+    console.info('sendMotorA: ', x);
+    fetch('/motor_a', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ x: x })
+    }).then(response => {
+        // Any actions
+    }).catch(error => {
+        console.error('Error sendMotorA to /motor_a:', error);
+    });
+}
+
+motorA.addEventListener('input', (event) => {
+    console.log('motorA input:', event.target.value);
+    sendMotorA(event.target.value);
 });
 
-grabber.addEventListener("change", (event) => {
-    console.log('Grabber change:', event.target.value);
+motorA.addEventListener('change', (event) => {
+    console.log('motorA change:', event.target.value);
     event.preventDefault();
-    grabber.value = 0;
-    // Remember to send 0
+    motorA.value = 0;
+    sendMotorA(motorA.value);
 });
-// const slider = document.querySelector('.slider');
-
-// function handleSliderEvent(event) {
-//     // Prevent default behavior to avoid page scrolling
-//     event.preventDefault();
-
-//     // Get the current position of the slider thumb
-//     let position;
-//     if (event.type === 'mousedown' || event.type === 'mousemove') {
-//         position = event.clientX;
-//     } else if (event.type === 'touchstart' || event.type === 'touchmove') {
-//         position = event.touches[0].clientX;
-//     }
-
-//     // Calculate the new value for the slider based on the position
-//     // ... (Your calculation logic here)
-//     //slider.value = newValue;
-// }
-
-
-// slider.addEventListener('mousedown', handleSliderEvent);
-// slider.addEventListener('touchstart', handleSliderEvent);
-
-// slider.addEventListener('mousemove', handleSliderEvent);
-// slider.addEventListener('touchmove', handleSliderEvent);
-
-// slider.addEventListener('mouseup', () => {
-//     slider.value = 0; // Snap back to 50%
-// });
-// slider.addEventListener('touchend', () => {
-//     slider.value = 0; // Snap back to 50%
-// });
