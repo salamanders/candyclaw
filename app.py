@@ -41,8 +41,8 @@ def handle_joystick_input():
   
 if __name__ == '__main__':
     try: 
-        app.run(host='0.0.0.0', debug=True)
+        print('Starting on port 9876')
+        app.run(host='0.0.0.0', debug=True, port=9876)
         print('Finished app.run')
     except KeyboardInterrupt: # except the program gets interrupted by Ctrl+C on the keyboard.
         BP.reset_all()   # Unconfigure the sensors, disable the motors, and restore the LED to the co
-

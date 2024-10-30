@@ -1,8 +1,5 @@
 /*jshint esversion: 8 */
 
-// Disable page scrolling
-document.body.addEventListener('touchstart', (e) => e.preventDefault());
-
 const joystick = document.getElementById('joystick');
 const joystick_handle = document.getElementById('joystick_handle');
 
