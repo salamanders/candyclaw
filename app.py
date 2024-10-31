@@ -24,7 +24,7 @@ def get_local_ip():
   
 BP = brickpi3.BrickPi3() # Create an instance of the BrickPi3 class. BP will be the BrickPi3 object.
 
-app = Flask(__name__, static_folder='./')
+app = Flask(__name__, static_folder='.')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 @app.route('/')
@@ -73,4 +73,3 @@ if __name__ == '__main__':
         print('Finished app.run')
     except KeyboardInterrupt: # except the program gets interrupted by Ctrl+C on the keyboard.
         BP.reset_all()   # Unconfigure the sensors, disable the motors, and restore the LED to the co
-
