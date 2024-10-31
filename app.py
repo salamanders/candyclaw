@@ -5,13 +5,12 @@ import brickpi3
 
 BP = brickpi3.BrickPi3() # Create an instance of the BrickPi3 class. BP will be the BrickPi3 object.
 
-app = Flask(__name__, static_folder='web')
+app = Flask(__name__, static_folder='./')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-
 
 @app.route('/')
 def index():
-    return send_from_directory('web', 'index.html')
+    return send_from_directory('index.html')
 
 @app.route('/motor_a', methods=['POST'])
 def motor_a():
