@@ -10,7 +10,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 @app.route('/')
 def index():
-    return send_from_directory('index.html')
+    return send_from_directory('.', 'index.html')
 
 @app.route('/motor_a', methods=['POST'])
 def motor_a():
