@@ -2,7 +2,26 @@ from flask import Flask, request, send_from_directory
 
 import time
 import brickpi3
+import socket
 
+def get_local_ip():
+  """Gets the IP address of the machine on the local network.
+
+  Returns:
+    str: The IP address (e.g., '192.168.1.100') or None if not found.
+  """
+  try:
+    # Create a socket object
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # Connect to a non-routable IP address (this is a trick to get the local IP)
+    s.connect(("8.8.8.8", 80))
+    # Get the local IP address from the socket
+    ip_address = s.getsockname()[0]
+    s.close()
+    return ip_address
+  except OSError:
+    return None
+  
 BP = brickpi3.BrickPi3() # Create an instance of the BrickPi3 class. BP will be the BrickPi3 object.
 
 app = Flask(__name__, static_folder='./')
@@ -48,8 +67,10 @@ def add_header(response):
 
 if __name__ == '__main__':
     try: 
-        print('Starting on port 9876')
+        local_ip = get_local_ip()
+        print('Starting on http://{}:9876'.format(local_ip))
         app.run(host='0.0.0.0', debug=True, port=9876)
         print('Finished app.run')
     except KeyboardInterrupt: # except the program gets interrupted by Ctrl+C on the keyboard.
         BP.reset_all()   # Unconfigure the sensors, disable the motors, and restore the LED to the co
+
