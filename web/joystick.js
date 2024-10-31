@@ -5,11 +5,11 @@ const joystick_handle = document.getElementById('joystick_handle');
 
 let isDragging = false;
 let lastSentTime = 0;
-const sendRateLimit = 250; // milliseconds
+const sendRateLimit = 200; // milliseconds
 
-function sendCoordinates(x, y) {
+function sendCoordinates(x, y, sendNow = false) {
     // TODO: Or big enough move?
-    if (Date.now() - lastSentTime > sendRateLimit) {
+    if (sendNow || Date.now() - lastSentTime > sendRateLimit) {
         console.info('sendCoordinates: ', x, y);
         fetch('/motor_x_y', {
             method: 'POST',
@@ -39,7 +39,7 @@ const centerAndSendHalt = () => {
     isDragging = false;
     joystick_handle.style.left = '50%';
     joystick_handle.style.top = '50%';
-    sendCoordinates(0, 0); // Send final 0,0 coordinate
+    sendCoordinates(0, 0, true); // Send final 0,0 coordinate
 };
 
 joystick.addEventListener('mouseup', () => {

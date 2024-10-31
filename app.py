@@ -71,5 +71,6 @@ if __name__ == '__main__':
         print('Starting on http://{}:9876'.format(local_ip))
         app.run(host='0.0.0.0', debug=True, port=9876)
         print('Finished app.run')
+        BP.reset_all()
     except KeyboardInterrupt: # except the program gets interrupted by Ctrl+C on the keyboard.
         BP.reset_all()   # Unconfigure the sensors, disable the motors, and restore the LED to the co
