@@ -35,7 +35,8 @@ def index():
 def motor_a():
     try: 
         data = request.get_json()
-        x = int(float(data['x'])*100)
+        # reverse direction
+        x = int(float(data['x'])*-100)
         BP.set_motor_power(BP.PORT_A, x)
         return "A:{}".format(x)
     except Exception as e:
